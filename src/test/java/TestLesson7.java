@@ -1,12 +1,15 @@
 import org.example.Lesson7;
 import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
 public class TestLesson7 {
 
     @Test
     public void factorialTest() {
         assertEquals(Lesson7.factorial(5), 120);
+
+        assertThrows(IllegalArgumentException.class, () -> Lesson7.factorial(-5));
     }
 
     @Test
@@ -14,6 +17,8 @@ public class TestLesson7 {
         double expectedResult = 6;
         double result = Lesson7.areaTriangle(3, 4, 5);
         assertEquals(result, expectedResult);
+
+        assertThrows(IllegalArgumentException.class, () -> Lesson7.areaTriangle(-3, 4, 5));
     }
 
     @Test
@@ -32,9 +37,11 @@ public class TestLesson7 {
 
     @Test
     public void testDivision() {
-        int expectedResult = 8;
-        double result = Lesson7.division(24, 3);
-        assertEquals(result, expectedResult);
+        double expectedResult = 4.8;
+        double result = Lesson7.division(24, 5);
+        assertEquals(result, expectedResult, 0.0001);
+
+        assertThrows(ArithmeticException.class, () -> Lesson7.division(5, 0));
     }
 
     @Test
