@@ -3,6 +3,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestLesson7 {
 
@@ -10,6 +11,8 @@ public class TestLesson7 {
     @DisplayName("Факториал числа")
     public void factorialTest() {
         assertEquals(120, Lesson7.factorial(5));
+
+        assertThrows(IllegalArgumentException.class, () -> Lesson7.factorial(-5));
     }
 
     @Test
@@ -18,6 +21,8 @@ public class TestLesson7 {
         double expectedResult = 6;
         double result = Lesson7.areaTriangle(3, 4, 5);
         assertEquals(expectedResult, result);
+
+        assertThrows(IllegalArgumentException.class, () -> Lesson7.areaTriangle(-3, 4, 5));
     }
 
     @Test
@@ -39,9 +44,11 @@ public class TestLesson7 {
     @Test
     @DisplayName("Деление двух целых чисел")
     public void testDivision() {
-        int expectedResult = 8;
-        double result = Lesson7.division(24, 3);
-        assertEquals(expectedResult, result);
+        double expectedResult = 4.8;
+        double result = Lesson7.division(24, 5);
+        assertEquals(expectedResult, result, 0.0001);
+
+        assertThrows(ArithmeticException.class, () -> Lesson7.division(5, 0));
     }
 
     @Test
