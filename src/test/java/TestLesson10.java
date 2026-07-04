@@ -23,6 +23,7 @@ public class TestLesson10 {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--incognito");
         options.addArguments("--start-maximized");
+        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(java.util.logging.Level.SEVERE);
         driver = new ChromeDriver(options);
         driver.get("https://www.mts.by/");
         sleep(300);
@@ -40,8 +41,7 @@ public class TestLesson10 {
         driver.quit();
     }
 
-    // --- ПУНКТ 1: Проверка placeholder'ов во всех табах ---
-
+    // Задание №1
     @Test
     @Order(1)
     void testPlaceholdersConnectionTab() {
@@ -54,7 +54,7 @@ public class TestLesson10 {
         assertEquals("E-mail для отправки чека", mainPage.getPlaceholder(mainPage.getEmailConnection()),
                 "Placeholder поля email (Услуги связи) не совпадает");
 
-        System.out.println("Тест 1. Placeholder'ы таба 'Услуги связи' корректны");
+        System.out.println("Тест 1. Плейсхолдеры таба 'Услуги связи' корректны");
     }
 
     @Test
@@ -70,7 +70,7 @@ public class TestLesson10 {
         assertEquals("E-mail для отправки чека", mainPage.getPlaceholder(mainPage.getEmailInternet()),
                 "Placeholder поля email (Домашний интернет) не совпадает");
 
-        System.out.println("Тест 2. Placeholder'ы таба 'Домашний интернет' корректны");
+        System.out.println("Тест 2. Плейсхолдеры таба 'Домашний интернет' корректны");
     }
 
     @Test
@@ -86,7 +86,7 @@ public class TestLesson10 {
         assertEquals("E-mail для отправки чека", mainPage.getPlaceholder(mainPage.getEmailInstalment()),
                 "Placeholder поля email (Рассрочка) не совпадает");
 
-        System.out.println("Тест 3. Placeholder'ы таба 'Рассрочка' корректны");
+        System.out.println("Тест 3. Плейсхолдеры таба 'Рассрочка' корректны");
     }
 
     @Test
@@ -102,11 +102,10 @@ public class TestLesson10 {
         assertEquals("E-mail для отправки чека", mainPage.getPlaceholder(mainPage.getEmailArrears()),
                 "Placeholder поля email (Задолженность) не совпадает");
 
-        System.out.println("Тест 4. Placeholder'ы таба 'Задолженность' корректны");
+        System.out.println("Тест 4. Плейсхолдеры таба 'Задолженность' корректны");
     }
 
-    // --- ПУНКТ 2: Проверки внутри iframe окна оплаты ---
-
+    // Задание №2
     @Test
     @Order(5)
     void testPaymentIFrame() throws InterruptedException {
@@ -115,26 +114,18 @@ public class TestLesson10 {
         sleep(300);
         mainPage.fillConnectionFormAndSubmit("297777777", "55", "ma@ma.ru");
 
-        // Ждём появления iframe и переключаемся в него
+        // Переключение на IFrame
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
-                By.xpath("//iframe[contains(@src,'bepaid.by')]")));
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[contains(@src,'bepaid.by')]")));
 
-        sleep(2000); // ждём загрузки содержимого iframe
+        sleep(2000);
 
-        // Проверка суммы
-        assertEquals("55.00 BYN", mainPage.getIFrameAmount(),
-                "Сумма в iframe не совпадает");
+        assertEquals("55.00 BYN", mainPage.getIFrameAmount(), "Сумма в iframe не совпадает");
 
-        // Проверка суммы на кнопке
-        assertEquals("Оплатить 55.00 BYN", mainPage.getIFramePayButtonText(),
-                "Сумма на кнопке оплаты не совпадает");
+        assertEquals("Оплатить 55.00 BYN", mainPage.getIFramePayButtonText(), "Сумма на кнопке оплаты не совпадает");
 
-        // Проверка номера телефона
-        assertEquals("Оплата: Услуги связи Номер:375297777777", mainPage.getIFramePhone(),
-                "Номер телефона в iframe не совпадает");
+        assertEquals("Оплата: Услуги связи Номер:375297777777", mainPage.getIFramePhone(), "Номер телефона в iframe не совпадает");
 
-        // Проверка надписей в полях карты
         assertEquals("Номер карты", mainPage.getIFrameLabelText(mainPage.getIFrameLabelCardNumber()),
                 "Label поля номера карты не совпадает");
         assertEquals("Срок действия", mainPage.getIFrameLabelText(mainPage.getIFrameLabelExpiry()),
@@ -144,15 +135,10 @@ public class TestLesson10 {
         assertEquals("Имя и фамилия на карте", mainPage.getIFrameLabelText(mainPage.getIFrameLabelHolder()),
                 "Label поля имени не совпадает");
 
-        // Проверка иконок платёжных систем
-        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconVisa()),
-                "Иконка Visa не отображается");
-        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconMastercard()),
-                "Иконка MasterCard не отображается");
-        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconBelkart()),
-                "Иконка Белкарт не отображается");
-        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconMaestro()),
-                "Иконка Maestro не отображается");
+        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconVisa()), "Иконка Visa не отображается");
+        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconMastercard()), "Иконка MasterCard не отображается");
+        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconBelkart()), "Иконка Белкарт не отображается");
+        assertTrue(mainPage.isIFrameIconDisplayed(mainPage.getIFrameIconMaestro()), "Иконка Maestro не отображается");
 
         System.out.println("Тест 5. Проверки в iframe пройдены");
     }
